@@ -1,0 +1,3 @@
+name;path;format
+IOWDB;./measurements/iowdb/;standard
+IOWDB_live;./measurements/iowdb_live/;sqldb
