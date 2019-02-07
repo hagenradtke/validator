@@ -1,0 +1,3 @@
+name;latmin;latmax;lonmin;lonmax;coastline
+Baltic Sea;53.0;67.0;9.0;30.0;./coastlines/coastline_baltic.txt
+Southern Baltic;53.0;58.0;9.0;30.0;./coastlines/coastline_baltic.txt

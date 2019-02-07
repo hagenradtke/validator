@@ -1,0 +1,3 @@
+name;path
+MOM5 TEP V01 R12;./models/MOM5_TEP_V01_R12/
+GETM NSBS2nm vHR031;./models/GETM_NSBS2NM_vHR031/
