@@ -69,7 +69,6 @@ read_measured_data_sqldb <- function(directory,
                               ) {
 
   # STEP 1: SOME CONSISTENCY CHECKING OF INPUT ARGUMENTS
-  write("read_measured_data_sqldb HP 1",file = "./temp/logfile.txt",append=TRUE)
   # assert that start and and date are of date format
   start_date <- try( as.Date(start_date, format= "%Y-%m-%d") )
   if( class(start_date) == "try-error" || is.na(start_date) ) stop("start_date must be of format YYYY-MM-DD")
@@ -85,7 +84,6 @@ read_measured_data_sqldb <- function(directory,
   if (!is.numeric(max_depth))    stop("max_depth must have a numeric value")
   if (!is.numeric(above_ground)) stop("above_ground must have a numeric value")
 
-  write("read_measured_data_sqldb HP 2",file = "./temp/logfile.txt",append=TRUE)
   # STEP 2: DELETE ALL FILES OLDER THAN 5 DAYS
   all_files  <- list.files(path=paste0(directory,"stationdata/"), pattern=glob2rx("sqldb_*.csv"), full.names=TRUE)
   file_times <- file.mtime(all_files)
@@ -103,7 +101,6 @@ read_measured_data_sqldb <- function(directory,
   start_dates    <- as.Date(substr(station_files,7,16))
   end_dates      <- as.Date(substr(station_files,18,27))
 
-  write("read_measured_data_sqldb HP 3",file = "./temp/logfile.txt",append=TRUE)
   # check if any time span is sufficiently long, if yes, use the first appropriate file
   time_span_ok   <- (start_dates <= start_date) & (end_dates >= end_date)
   if (any(time_span_ok)) {
@@ -115,7 +112,6 @@ read_measured_data_sqldb <- function(directory,
     database <- read.table(paste0(directory,"db_connection.txt"),header=TRUE,sep=";",stringsAsFactors=FALSE,quote = "'",)
     if (is.na(database$password)) {database$password<-""}
     
-    write("read_measured_data_sqldb HP 4",file = "./temp/logfile.txt",append=TRUE)
     # connect to the database
     library("RMariaDB")
     con <- NULL
@@ -124,10 +120,8 @@ read_measured_data_sqldb <- function(directory,
     })
     if (is.null(con)) stop("Could not connect to SQL database")
     
-    write("read_measured_data_sqldb HP 4.2",file = "./temp/logfile.txt",append=TRUE)
     dbExecute(con,paste0("USE ",database$databasename,";"))
     
-    write("read_measured_data_sqldb HP 5",file = "./temp/logfile.txt",append=TRUE)
     # prepare values for SQL query
     startdatetime <- paste0(format(start_date,format="%Y-%m-%d")," 00:00:00")
     enddatetime   <- paste0(format(end_date,format="%Y-%m-%d")," 00:00:00")
@@ -136,7 +130,6 @@ read_measured_data_sqldb <- function(directory,
     lon_min       <- read_options$longitude - 1/(60*max(0.01,cos(read_options$latitude*pi/180)))
     lon_max       <- read_options$longitude + 1/(60*max(0.01,cos(read_options$latitude*pi/180)))
     
-    write("read_measured_data_sqldb HP 5.1",file = "./temp/logfile.txt",append=TRUE)
     # SQL query - store data in a data frame, select all depths
     df <- dbGetQuery(con,paste0('SELECT measurements.depth,measurements.datetime,measurements.value ',
                                 'FROM (measurements INNER JOIN variables ON measurements.variable=variables.id) ',
@@ -148,8 +141,6 @@ read_measured_data_sqldb <- function(directory,
                                 'AND measurements.latitude>="',lat_min,'" ',
                                 'AND measurements.latitude<="',lat_max,'" ',
                                 ');'))
-    
-    write("read_measured_data_sqldb HP 6",file = "./temp/logfile.txt",append=TRUE)
     
     # disconnect from the database
     dbDisconnect(con)
