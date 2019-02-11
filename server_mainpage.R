@@ -446,6 +446,11 @@
                 dpi=NULL
                 do_this_in_parallel <- FALSE
                 source("do_the_plot.R",local=TRUE)
+                # close progress bar
+                isolate({
+                  if (file.exists("./temp/progress.csv")) {file.remove("./temp/progress.csv")}
+                  if (!is.null(saved$progress)) { saved$progress$close(); saved$progress=NULL }
+                })
                 return(con)
               }
             }
