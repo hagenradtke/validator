@@ -1,2 +1,2 @@
 username;password;host;port;databasename
-'validator';'';'localhost';0;'measurements'
+'validator';'test';'localhost';0;'measurements'
