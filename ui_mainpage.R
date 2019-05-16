@@ -98,6 +98,17 @@ output$selected_page <- renderUI(fluidRow(column(12,
                column(12,
                       uiOutput("depthabovebottom")
                      )
+      ), 
+      
+      # help button
+      fluidRow(column(12,
+                      shiny::strong("Help")
+                     )
+      ),
+      fluidRow(column(12,
+                      actionButton(inputId='downloadusersguide', label="Show users' guide", 
+                                   onclick ="window.open('https://github.com/hagenradtke/validator/blob/master/usersguide.pdf', '_blank')")
+                     )
       )
     ),
     ################
